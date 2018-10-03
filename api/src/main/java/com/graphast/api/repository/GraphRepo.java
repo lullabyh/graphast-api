@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.insightlab.graphast.model.Graph;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class GraphRepo {
 	
 	Map<String, Graph> map = new HashMap<>();
