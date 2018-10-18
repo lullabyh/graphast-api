@@ -26,8 +26,13 @@ public class GraphResource {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Graph> getGraph(@RequestParam String graphName){
+	public ResponseEntity<?> getGraph(@RequestParam String graphName){
 		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName));
+	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<?> getAllGraphs(){
+		return ResponseEntity.ok(GraphRepo.getInstance().getAll());
 	}
 	
 	@PostMapping("/{graphName}/node")

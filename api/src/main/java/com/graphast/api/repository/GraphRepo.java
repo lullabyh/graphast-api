@@ -33,6 +33,10 @@ public class GraphRepo {
 			map.put(graphName, graph);
 		}
 	}
+	
+	public Map<String, Graph> getAll(){
+		return map;
+	}
 
 	public void delete(String name) {
 		map.remove(name);
@@ -41,4 +45,6 @@ public class GraphRepo {
 	public Graph get(String name) {
 		return map.get(name);
 	}
+	
+	
 }
