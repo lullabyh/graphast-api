@@ -19,15 +19,17 @@ import com.graphast.api.repository.GraphRepo;
 public class GraphResource {
 	
 	@PostMapping
-	public ResponseEntity<Graph> createGraph(@RequestBody String graphName){
-
+	public Graph createGraph(@RequestBody String graphName){
+		
 		GraphRepo.getInstance().create(graphName);
-		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName));
+
+		return GraphRepo.getInstance().get(graphName);
+
 	}
 	
 	@GetMapping
-	public ResponseEntity<Graph> getGraph(@RequestParam String graphName){
-		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName));
+	public Graph getGraph(@RequestParam String graphName){
+		return GraphRepo.getInstance().get(graphName);
 	}
 	
 	@PostMapping("/{graphName}/node")
@@ -35,9 +37,6 @@ public class GraphResource {
 		Graph graph = GraphRepo.getInstance().get(graphName);
 		if(graph != null){
 			graph.addNode(node);
-			return ResponseEntity.ok(graph);
-		}else {
-			System.out.println("Graph is null");
 		}
 		return ResponseEntity.ok(graph);
 	}
