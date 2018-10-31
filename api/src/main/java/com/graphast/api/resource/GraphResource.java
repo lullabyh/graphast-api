@@ -32,6 +32,11 @@ public class GraphResource {
 		return GraphRepo.getInstance().get(graphName);
 	}
 	
+	@GetMapping("/all")
+	public ResponseEntity<?> getAllGraphs(){
+		return ResponseEntity.ok(GraphRepo.getInstance().getAll());
+	}
+	
 	@PostMapping("/{graphName}/node")
 	public ResponseEntity<Graph> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
 		Graph graph = GraphRepo.getInstance().get(graphName);
