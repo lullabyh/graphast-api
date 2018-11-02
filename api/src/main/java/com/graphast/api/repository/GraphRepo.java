@@ -4,25 +4,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.insightlab.graphast.model.Graph;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@Scope("singleton")
 public class GraphRepo {
 	
-	Map<String, Graph> map = new HashMap<>();
+	private Map<String, Graph> map = new HashMap<>();
 
-	private static GraphRepo graphRepo;
-
-	private GraphRepo() {
-
+	public Map<String, Graph> getMap() {
+		return map;
 	}
-
-	public static GraphRepo getInstance() {
-		if (graphRepo == null) {
-			graphRepo = new GraphRepo();
-		}
-
-		return graphRepo;
+	
+	public void setMap(Map<String, Graph> map) {
+		this.map = map;
 	}
-
+	
 	public void create(String graphName) {
 		Graph graph = new Graph();
 		map.put(graphName, graph);
@@ -40,11 +38,5 @@ public class GraphRepo {
 
 	public void delete(String name) {
 		map.remove(name);
-	}
-
-	public Graph get(String name) {
-		return map.get(name);
-	}
-	
-	
+	}	
 }
