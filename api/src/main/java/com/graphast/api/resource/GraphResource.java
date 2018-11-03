@@ -36,15 +36,22 @@ public class GraphResource {
 	}
 	
 	@PostMapping("/{graphName}/node")
-	public ResponseEntity<Graph> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
+	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
+		int codeResponse = 200;
+		
 		Graph graph = GraphRepo.getInstance().get(graphName);
-		if(graph != null){
+		
+		if(graph == null){
+			codeResponse = 204;
+		}else{
 			graph.addNode(node);
-			return ResponseEntity.ok(graph);
-		}else {
-			System.out.println("Graph is null");
 		}
-		return ResponseEntity.ok(graph);
+		return ResponseEntity.status(codeResponse).build();
+	}
+	
+	@GetMapping("/{graphName}/node")
+	public ResponseEntity<?> getNodeGraph(@PathVariable()String graphName){
+		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName).getNode(01));
 	}
 	
 	@PostMapping("/{graphName}/{firstNode}/{secondNode}")
@@ -52,6 +59,11 @@ public class GraphResource {
 		Graph graph = GraphRepo.getInstance().get(graphName);
 		graph.addEdge(edge);
 		return ResponseEntity.ok(graph);
+	}
+	
+	@GetMapping("/{graphName}/edge")
+	public ResponseEntity<?> getEdgeGraph(@PathVariable()String graphName){
+		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName).getNodes());
 	}
 
 }
