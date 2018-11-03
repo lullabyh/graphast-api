@@ -3,7 +3,6 @@ package com.graphast.api.resource;
 import org.insightlab.graphast.model.Edge;
 import org.insightlab.graphast.model.Graph;
 import org.insightlab.graphast.model.Node;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,42 +18,38 @@ import com.graphast.api.repository.GraphRepo;
 @RequestMapping("/graph-generator")
 public class GraphResource {
 	
-	@Autowired
-	private GraphRepo graphRepo;
-	
 	@PostMapping
-	public Graph createGraph(@RequestBody String graphName){
-		
-		graphRepo.create(graphName);
+	public ResponseEntity<Graph> createGraph(@RequestBody String graphName){
 
-		return graphRepo.getMap().get(graphName);
-
+		GraphRepo.getInstance().create(graphName);
+		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName));
 	}
 	
 	@GetMapping
-	public Graph getGraph(@RequestParam String graphName){
-
-		return graphRepo.getMap().get(graphName);
+	public ResponseEntity<?> getGraph(@RequestParam String graphName){
+		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName));
 	}
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> getAllGraphs(){
-		return ResponseEntity.ok(graphRepo.getAll());
+		return ResponseEntity.ok(GraphRepo.getInstance().getAll());
 	}
 	
 	@PostMapping("/{graphName}/node")
 	public ResponseEntity<Graph> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
-		
-		Graph graph = graphRepo.getMap().get(graphName);
+		Graph graph = GraphRepo.getInstance().get(graphName);
 		if(graph != null){
 			graph.addNode(node);
+			return ResponseEntity.ok(graph);
+		}else {
+			System.out.println("Graph is null");
 		}
 		return ResponseEntity.ok(graph);
 	}
 	
 	@PostMapping("/{graphName}/{firstNode}/{secondNode}")
 	public ResponseEntity<Graph> createEdge(@PathVariable("graphName")String graphName,@PathVariable("firstNode")long firstNode, @PathVariable("secondNode") long secondNode, @RequestBody Edge edge){
-		Graph graph = graphRepo.getMap().get(graphName);
+		Graph graph = GraphRepo.getInstance().get(graphName);
 		graph.addEdge(edge);
 		return ResponseEntity.ok(graph);
 	}
