@@ -1,5 +1,7 @@
 package com.graphast.api.resource;
 
+import java.util.List;
+
 import org.insightlab.graphast.model.Edge;
 import org.insightlab.graphast.model.Graph;
 import org.insightlab.graphast.model.Node;
@@ -37,16 +39,14 @@ public class GraphResource {
 	
 	@PostMapping("/{graphName}/node")
 	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
-		int codeResponse = 200;
-		
 		Graph graph = GraphRepo.getInstance().get(graphName);
 		
 		if(graph == null){
-			codeResponse = 204;
+			return ResponseEntity.badRequest().build();
 		}else{
 			graph.addNode(node);
 		}
-		return ResponseEntity.status(codeResponse).build();
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/{graphName}/node")
@@ -54,10 +54,17 @@ public class GraphResource {
 		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName).getNode(01));
 	}
 	
-	@PostMapping("/{graphName}/{firstNode}/{secondNode}")
-	public ResponseEntity<Graph> createEdge(@PathVariable("graphName")String graphName,@PathVariable("firstNode")long firstNode, @PathVariable("secondNode") long secondNode, @RequestBody Edge edge){
+	@PostMapping("/{graphName}/edge")
+	public ResponseEntity<Graph> createEdge(@PathVariable("graphName")String graphName, @RequestBody Edge edge){
 		Graph graph = GraphRepo.getInstance().get(graphName);
-		graph.addEdge(edge);
+		
+		if(graph == null){
+			return ResponseEntity.badRequest().build();
+		}else{
+			graph.addNode(edge.getFromNodeId());
+			graph.addNode(edge.getToNodeId());
+			graph.addEdge(edge);
+			}
 		return ResponseEntity.ok(graph);
 	}
 	
