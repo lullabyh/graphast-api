@@ -1,10 +1,10 @@
 package com.graphast.api.resource;
 
-import java.util.List;
-
 import org.insightlab.graphast.model.Edge;
 import org.insightlab.graphast.model.Graph;
 import org.insightlab.graphast.model.Node;
+import org.insightlab.graphast.model.components.spatial_components.Point;
+import org.insightlab.graphast.model.components.spatial_components.SpatialNodeComponent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +38,10 @@ public class GraphResource {
 	}
 	
 	@PostMapping("/{graphName}/node")
-	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody Node node){
+	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody Long id, @RequestBody Point point){
 		Graph graph = GraphRepo.getInstance().get(graphName);
-		
+		Node node = new Node(id);
+		node.addComponent(new SpatialNodeComponent(point));
 		if(graph == null){
 			return ResponseEntity.badRequest().build();
 		}else{
