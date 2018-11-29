@@ -1,5 +1,9 @@
 package com.graphast.api.model;
 
+import java.util.List;
+
+import org.insightlab.graphast.model.components.spatial_components.Point;
+
 public class EdgeDTO {
 	
 	private long id;
@@ -7,6 +11,7 @@ public class EdgeDTO {
 	private long to;
 	private double weight;
 	private boolean bidirectional;
+	private List<Point> points;
 
 	public long getId() {
 		return id;
@@ -45,5 +50,13 @@ public class EdgeDTO {
 
 	public void setBidirectional(boolean bidirectional) {
 		this.bidirectional = bidirectional;
+	}
+
+	public List<Point> getPoints() {
+		return points;
+	}
+
+	public void setPoints(List<Point> points) {
+		this.points = points;
 	}
 }

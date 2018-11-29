@@ -73,9 +73,9 @@ public class GraphResource {
 		return ResponseEntity.ok(graph);
 	}
 	
-	@GetMapping("/{graphName}/edge")
+	@GetMapping("/{graphName}/edges")
 	public ResponseEntity<?> getEdgeGraph(@PathVariable()String graphName){
-		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName).getNodes());
+		return ResponseEntity.ok(GraphRepo.getInstance().get(graphName).getEdges());
 	}
 
 }
