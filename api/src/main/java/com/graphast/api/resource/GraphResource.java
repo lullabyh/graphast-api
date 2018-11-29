@@ -3,7 +3,6 @@ package com.graphast.api.resource;
 import org.insightlab.graphast.model.Edge;
 import org.insightlab.graphast.model.Graph;
 import org.insightlab.graphast.model.Node;
-import org.insightlab.graphast.model.components.spatial_components.Point;
 import org.insightlab.graphast.model.components.spatial_components.SpatialNodeComponent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.graphast.api.model.EdgeDTO;
+import com.graphast.api.model.NodeDTO;
 import com.graphast.api.repository.GraphRepo;
 
 @RestController
@@ -38,10 +39,11 @@ public class GraphResource {
 	}
 	
 	@PostMapping("/{graphName}/node")
-	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody Long id, @RequestBody Point point){
+	public ResponseEntity<?> createNode(@PathVariable("graphName")String graphName, @RequestBody NodeDTO nodeDTO){
 		Graph graph = GraphRepo.getInstance().get(graphName);
-		Node node = new Node(id);
-		node.addComponent(new SpatialNodeComponent(point));
+		Node node = new Node(nodeDTO.getId());
+		
+		node.addComponent(new SpatialNodeComponent(nodeDTO.getLat(), nodeDTO.getLng()));
 		if(graph == null){
 			return ResponseEntity.badRequest().build();
 		}else{
@@ -56,14 +58,16 @@ public class GraphResource {
 	}
 	
 	@PostMapping("/{graphName}/edge")
-	public ResponseEntity<Graph> createEdge(@PathVariable("graphName")String graphName, @RequestBody Edge edge){
+	public ResponseEntity<Graph> createEdge(@PathVariable("graphName")String graphName, @RequestBody EdgeDTO edgeDTO){
 		Graph graph = GraphRepo.getInstance().get(graphName);
 		
 		if(graph == null){
 			return ResponseEntity.badRequest().build();
 		}else{
-			graph.addNode(edge.getFromNodeId());
-			graph.addNode(edge.getToNodeId());
+			Edge edge = new Edge();
+			edge.setId(edgeDTO.getId());
+			edge.setFromNodeId(edgeDTO.getFrom());
+			edge.setToNodeId(edgeDTO.getTo());
 			graph.addEdge(edge);
 			}
 		return ResponseEntity.ok(graph);
