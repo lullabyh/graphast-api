@@ -3,6 +3,7 @@ package com.graphast.api.resource;
 import org.insightlab.graphast.model.Edge;
 import org.insightlab.graphast.model.Graph;
 import org.insightlab.graphast.model.Node;
+import org.insightlab.graphast.model.components.cost_list_components.CostListEdgeComponent;
 import org.insightlab.graphast.model.components.spatial_components.SpatialNodeComponent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,13 +65,11 @@ public class GraphResource {
 		if(graph == null){
 			return ResponseEntity.badRequest().build();
 		}else{
-			Edge edge = new Edge();
-			edge.setId(edgeDTO.getId());
-			edge.setFromNodeId(edgeDTO.getFrom());
-			edge.setToNodeId(edgeDTO.getTo());
+			Edge edge = new Edge(edgeDTO.getFrom(), edgeDTO.getTo());
+			edge.addComponent(new CostListEdgeComponent(3.));
 			graph.addEdge(edge);
 			}
-		return ResponseEntity.ok(graph);
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/{graphName}/edges")

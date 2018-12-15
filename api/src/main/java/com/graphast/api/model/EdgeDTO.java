@@ -6,21 +6,11 @@ import org.insightlab.graphast.model.components.spatial_components.Point;
 
 public class EdgeDTO {
 	
-	private long id;
 	private long from;
 	private long to;
 	private double weight;
 	private boolean bidirectional;
 	private List<Point> points;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public long getFrom() {
 		return from;
 	}
